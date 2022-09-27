@@ -1,43 +1,52 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+  <q-layout view="lHh Lpr lFf" class="shadow-2 rounded-borders">
+    <q-header elevated class="q-pa-md glossy">
+        <q-toolbar>
+          <q-btn
+            class="absolute-left"
+            round
+            dense
+            size="1.5em"
+            icon="local_mall"
+          />
 
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
+          <div class="absolute-center">
+            <q-toolbar-title>
+                <q-icon
+                  name="account_circle"
+                  size="2em"
+                >
+                </q-icon>
+                {{ name }}
+            </q-toolbar-title>
+          </div>
 
-        <div>Quasar v{{ $q.version }}</div>
-      </q-toolbar>
+          <mini-cart
+            class="absolute-right"
+          />
+        </q-toolbar>
+        <div class="flex justify-center q-mt-md">
+          <q-tabs
+            v-for="category in categories"
+            :key="category.id">
+            <q-btn
+              :to="category.path"
+              flat
+              no-caps
+              :label="category.name"
+              :icon="category.icon"
+              :categoryPath="category.path"
+              />
+          </q-tabs>
+        </div>
     </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
+    <q-footer elevated>
+      <q-toolbar class="glossy">
+        <div
+          class="text-overline absolute-center q-pa-md"
+          style="color:grey">© 2022 OMDA All Rights Reserved</div>
+      </q-toolbar>
+    </q-footer>
 
     <q-page-container>
       <router-view />
@@ -47,70 +56,49 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
-import EssentialLink from 'components/EssentialLink.vue';
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev',
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework',
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev',
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev',
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev',
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev',
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev',
-  },
-];
+import MiniCart from '../components/MiniCart.vue';
 
 export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    EssentialLink,
+    MiniCart,
   },
 
   setup() {
-    const leftDrawerOpen = ref(false);
+    const name = ref('OMDA');
+
+    const categories = ref([
+      {
+        name: 'Electronics',
+        icon: 'cable',
+        path: 'electronics',
+
+      },
+      {
+        name: 'Jewelery',
+        icon: 'diamond',
+        path: 'jewelery',
+      },
+      {
+        name: "Men's Clothing",
+        icon: 'hail',
+        path: "men's clothing",
+      },
+      {
+        name: "Women's Clothing",
+        icon: 'girl',
+        path: "women's clothing",
+      },
+    ]);
 
     return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value;
-      },
+      name,
+      categories,
     };
   },
 });
 </script>
+<style lang="scss">
+
+</style>
